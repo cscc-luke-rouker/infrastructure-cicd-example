@@ -1,0 +1,44 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: flaskapp
+  labels:
+    app_name: flaskapp
+spec:
+  type: NodePort
+  ports:
+  - port: 8080
+    targetPort: 5000
+    protocol: TCP
+    name: http
+  selector:
+    app_name: flaskapp
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flaskapp
+  labels:
+    app_name: flaskapp
+spec:
+  replicas: 2
+  revisionHistoryLimit: 3
+  selector:
+    matchLabels:
+      app_name: flaskapp
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  template:
+    metadata:
+      labels:
+        app_name: flaskapp
+    spec:
+      containers:
+      - name: flaskapp
+        imagePullPolicy: Never
+        image: flaskapp 
+        ports:
+        - containerPort: 5000
