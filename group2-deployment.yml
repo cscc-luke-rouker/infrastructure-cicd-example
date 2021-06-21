@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: group2
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app_name: group2
+  template:
+    metadata:
+      labels:
+        app_name: group2
+    spec:
+      containers:
+      - name: group2container
+        image: group2:1.0.2
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 5000
+
